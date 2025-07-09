@@ -16,18 +16,18 @@ int main() {
     srand(time(NULL));
     chiffre = rand() % b + a;
 
-    cout << "Le chiffre est compris entre " << a << " et" << b << ", à vous de jouer";
+    cout << "Le chiffre est compris entre " << a << " et" << b << ", à vous de jouer" << endl;
     cin >> guess;
 
     while (guess != chiffre) {
 
         if (guess > chiffre) {
-            cout << "Plus petit";
+            cout << "Plus petit" << endl;
             cin >> guess;
         }
 
         else {
-            cout << "Plus grand";
+            cout << "Plus grand" << endl;
             cin >> guess;
         }
     }
