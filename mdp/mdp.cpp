@@ -22,7 +22,6 @@ int generateNumber(){
     char c = dis(gen);
 
     return c;
-    
 }
 
 
@@ -34,7 +33,6 @@ char generateUpperCase(){
     char c = dis(gen);
 
     return c;
-    
 }
 
 
@@ -46,7 +44,6 @@ char generateLowerCase(){
     char c = dis(gen);
 
     return c;
-    
 }
 
 char generateSpecialOne(){
@@ -83,7 +80,6 @@ char generateSpecialOne(){
             std::cout << "Error" << std::endl;
             break;
     }
-
 
     return c;
 }
