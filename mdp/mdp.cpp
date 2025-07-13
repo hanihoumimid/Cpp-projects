@@ -2,6 +2,8 @@
 #include <random>
 #include <string>
 #include <limits>
+#include <vector>
+#include <cstdlib>
 
 void checkLong(int longueur){
     if (longueur < 8){
@@ -104,16 +106,47 @@ char generateSpecialOne(){
 
 int main(){
     int longueur;
-    int longe = generateNumber();
-    char c = generateSpecialOne();
-    std::cout << "Test caracteres spe in ascii : " << c << int(c) << std::endl;
+    char c;
+    std::string mdp;
+
     std::cout << "Bienvenue dans le générateur de mot de passe" << std::endl;
     std::cout << "Tout d'abord, veuillez indiquer la longueur du mot de passe" << std::endl;
-    while (!(std::cin >> longueur)) {
-        std::cout << "Entrée invalide. Veuillez entrer un nombre pour la longueur du mot de passe (minimum 8, max 32) : ";
-        std::cin.clear(); 
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin >> longueur;
+    // while (!(std::cin >> longueur)) {
+    //     std::cout << "Entrée invalide. Veuillez entrer un nombre pour la longueur du mot de passe (minimum 8, max 32) : ";
+    //     std::cin.clear(); 
+    //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0,3);
+
+    for (int i; i < longueur; i++){
+        switch(dis(gen)){
+            case 0 : {
+                c = generateNumber();
+                break;
+            }
+            case 1 : {
+                c = generateLowerCase();
+                break;
+            }
+            case 2 : {
+                c = generateUpperCase();
+                break;
+            }
+            case 3 : {
+                c = generateSpecialOne();
+                break;
+            }
+
+            default : std::cout << "azer" << std::endl;
+        };
+        mdp.push_back(c);
     }
+    std::cout << "Voici votre mot de passe : " << mdp << std::endl;
+
+    system("pause");
 }
 
 
