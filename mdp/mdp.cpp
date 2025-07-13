@@ -5,16 +5,12 @@
 #include <vector>
 #include <cstdlib>
 
-void checkLong(int longueur){
-    if (longueur < 8){
-        std::cout << "La longueur doit être d'au moins 8 caractères" << std::endl;
-        std::cin >> longueur;
-    }
-    else if (longueur > 32){
-        std::cout << "La longueur doit être inférieur à 32 caractères" << std::endl;
-        std::cin >> longueur;
-    }
-}
+// void checkLong(int longueur){
+//     if (longueur < 8 || longueur > 32){
+//         std::cout << "La longueur doit être d'au moins 8 caractères et maximum 32 caractères" << std::endl;
+//         std::cin >> longueur;
+//     }
+// }
 
 
 
@@ -124,25 +120,24 @@ int main(){
     for (int i; i < longueur; i++){
         switch(dis(gen)){
             case 0 : {
-                c = generateNumber();
+                mdp.push_back(generateSpecialOne());
                 break;
             }
             case 1 : {
-                c = generateLowerCase();
+                mdp.push_back(generateLowerCase());
                 break;
             }
             case 2 : {
-                c = generateUpperCase();
+                mdp.push_back(generateUpperCase());
                 break;
             }
             case 3 : {
-                c = generateSpecialOne();
+                mdp.push_back(generateNumber());
                 break;
             }
 
             default : std::cout << "azer" << std::endl;
-        };
-        mdp.push_back(c);
+        }
     }
     std::cout << "Voici votre mot de passe : " << mdp << std::endl;
 
