@@ -21,8 +21,6 @@ int generateNumber(){
 
     char c = dis(gen);
 
-    std::cout << "Ascii : " << c << ",int : " << int(c) << std::endl;
-
     return c;
     
 }
@@ -35,8 +33,6 @@ char generateUpperCase(){
 
     char c = dis(gen);
 
-    std::cout << "Ascii : " << c << ",int : " << int(c) << std::endl;
-
     return c;
     
 }
@@ -48,8 +44,6 @@ char generateLowerCase(){
     std::uniform_int_distribution<> dis(97,122);
 
     char c = dis(gen);
-
-    std::cout << "Ascii : " << c << ",int : " << int(c) << std::endl;
 
     return c;
     
