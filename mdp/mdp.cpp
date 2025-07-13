@@ -15,9 +15,10 @@ void checkLong(int longueur){
 }
 
 
+
 int generateNumber(){
-    std::random_device rd; // Obtain a random number from hardware
-    std::mt19937 gen(rd()); // Seed the generator
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
     std::uniform_int_distribution<> dis(48,57);
 
     char c = dis(gen);
@@ -28,9 +29,84 @@ int generateNumber(){
     
 }
 
+
+char generateUpperCase(){
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> dis(65,90);
+
+    char c = dis(gen);
+
+    std::cout << "Ascii : " << c << ",int : " << int(c) << std::endl;
+
+    return c;
+    
+}
+
+
+char generateLowerCase(){
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> dis(97,122);
+
+    char c = dis(gen);
+
+    std::cout << "Ascii : " << c << ",int : " << int(c) << std::endl;
+
+    return c;
+    
+}
+
+char generateSpecialOne(){
+    std::random_device rd;
+    std::mt19937 gen(rd()); 
+
+    std::uniform_int_distribution<> intervalle_dis(0, 3);
+    int intervalle = intervalle_dis(gen);
+
+    char c; 
+
+    switch(intervalle){
+        case 0: { 
+            std::uniform_int_distribution<> char_dis(33, 47);
+            c = char_dis(gen); 
+            break;
+        }
+        case 1: {
+            std::uniform_int_distribution<> char_dis(58, 64);
+            c = char_dis(gen);
+            break;
+        }
+        case 2: {
+            std::uniform_int_distribution<> char_dis(91, 96);
+            c = char_dis(gen);
+            break;
+        }
+        case 3: {
+            std::uniform_int_distribution<> char_dis(123, 126);
+            c = char_dis(gen);
+            break;
+        }
+        default:
+            std::cout << "Error" << std::endl;
+            break;
+    }
+
+
+    return c;
+}
+
+
+
+
+
+
+
 int main(){
     int longueur;
     int longe = generateNumber();
+    char c = generateSpecialOne();
+    std::cout << "Test caracteres spe in ascii : " << c << int(c) << std::endl;
     std::cout << "Bienvenue dans le générateur de mot de passe" << std::endl;
     std::cout << "Tout d'abord, veuillez indiquer la longueur du mot de passe" << std::endl;
     while (!(std::cin >> longueur)) {
