@@ -5,12 +5,14 @@
 #include <vector>
 #include <cstdlib>
 
-// void checkLong(int longueur){
-//     if (longueur < 8 || longueur > 32){
-//         std::cout << "La longueur doit être d'au moins 8 caractères et maximum 32 caractères" << std::endl;
-//         std::cin >> longueur;
-//     }
-// }
+bool checkLong(int& longueur) {
+    if (longueur >= 8 && longueur <= 32) {
+        return true;
+    }
+    std::cout << "La longueur doit être d'au moins 8 caractères et maximum 32 caractères" << std::endl;
+    std::cin.clear();
+    return false;
+}
 
 
 
@@ -97,17 +99,17 @@ int main(){
 
     std::cout << "Bienvenue dans le générateur de mot de passe" << std::endl;
     std::cout << "Tout d'abord, veuillez indiquer la longueur du mot de passe" << std::endl;
-    std::cin >> longueur;
-    // while (!(std::cin >> longueur)) {
-    //     std::cout << "Entrée invalide. Veuillez entrer un nombre pour la longueur du mot de passe (minimum 8, max 32) : ";
-    //     std::cin.clear(); 
-    //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    // }
+    while (!(std::cin >> longueur) || !checkLong(longueur)) {
+        std::cout << "Veuillez entrer un nombre valide entre 8 et 32 : ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0,3);
 
-    for (int i; i < longueur; i++){
+    for (int i = 0; i < longueur; i++){
         switch(dis(gen)){
             case 0 : {
                 mdp.push_back(generateSpecialOne());
