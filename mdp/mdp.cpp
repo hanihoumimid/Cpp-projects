@@ -4,9 +4,10 @@
 #include <limits>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 
 bool checkLong(int& longueur) {
-    if (longueur >= 8 && longueur <= 32) {
+    if (longueur >= 8 && longueur <= 64) {
         return true;
     }
     std::cout << "La longueur doit être d'au moins 8 caractères et maximum 32 caractères" << std::endl;
@@ -88,22 +89,26 @@ char generateSpecialOne(){
 
 
 
-
-
-
-
 int main(){
     int longueur;
     char c;
-    std::string mdp;
+    std::string mdp, mdp_name, filename = "mdp.txt";
+
+    std::ofstream fichier(filename, std::ios::app);
 
     std::cout << "Bienvenue dans le générateur de mot de passe" << std::endl;
     std::cout << "Tout d'abord, veuillez indiquer la longueur du mot de passe" << std::endl;
     while (!(std::cin >> longueur) || !checkLong(longueur)) {
-        std::cout << "Veuillez entrer un nombre valide entre 8 et 32 : ";
+        std::cout << "Veuillez entrer un nombre valide entre 8 et 64 : ";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+    std::cout << "Veuillez maintenant indiquer l\'identification du mot de passe" << std::endl;
+    std::getline(std::cin, mdp_name);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -131,7 +136,19 @@ int main(){
             default : std::cout << "azer" << std::endl;
         }
     }
-    std::cout << "Voici votre mot de passe : " << mdp << std::endl;
+
+    if(fichier.is_open()){
+        fichier << mdp_name << " ; " << mdp << std::endl;
+        fichier << std::endl;
+        fichier.close();
+        std::cout << "Voici votre mot de passe : " << mdp << "et son nom " << mdp_name << ", écrit dans " << filename << std::endl;
+    } else {
+        std::cout << "Erreur lors de l'écriture du fichier" << std::endl;
+    }
+
+
+
+
 
     system("pause");
 }
