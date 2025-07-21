@@ -4,13 +4,21 @@
 #include <limits>
 #include <vector>
 #include <cstdlib>
+#include <map>
 #include <fstream>
+#include <sstream>
+#include <cppconn/driver.h>
+#include <cppconn/connection.h>
+#include <cppconn/statement.h>
+#include <cppconn/resultset.h>
+#include <cppconn/prepared_statement.h>
+
 
 bool checkLong(int& longueur) {
     if (longueur >= 8 && longueur <= 64) {
         return true;
     }
-    std::cout << "La longueur doit être d'au moins 8 caractères et maximum 32 caractères" << std::endl;
+    std::cout << "La longueur doit être d'au moins 8 caractères et maximum 64 caractères" << std::endl;
     std::cin.clear();
     return false;
 }
@@ -88,13 +96,60 @@ char generateSpecialOne(){
 }
 
 
+std::map<std::string, std::string> loadEnv(const std::string& filename){
+    std::ifstream file(filename);
+    std::map<std::string, std::string> env;
+    std::string line;
+
+    while(std::getline(file,line)){
+        std::istringstream is_line(line);
+        std::string key;
+        if(std::getline(is_line, key, '=')){
+            std::string value;
+            if(std::getline(is_line, value)){
+                env[key] = value;
+            }
+        }
+    }
+
+    return env;
+}
+
+void createTableIfNotExists(sql::Connection* conn) {
+    try {
+        std::unique_ptr<sql::Statement> stmt(conn->createStatement());
+
+        stmt->execute(
+            "CREATE TABLE IF NOT EXISTS mdp ("
+            "id INT AUTO_INCREMENT PRIMARY KEY, "
+            "nom VARCHAR(50) NOT NULL, "
+            "pass VARCHAR(64)"
+            ")"
+        );
+
+        std::cout << "Table 'mdp' créée (ou déjà existante)." << std::endl;
+    } catch (const sql::SQLException& e) {
+        std::cerr << "Erreur lors de la création de la table : " << e.what() << std::endl;
+    }
+}
+
+
 
 int main(){
     int longueur;
     char c;
-    std::string mdp, mdp_name, filename = "mdp.txt";
+    std::string mdp, mdp_name;
 
-    std::ofstream fichier(filename, std::ios::app);
+    auto env = loadEnv("../.env");
+
+    std::string host = "tcp://" + env["DB_HOST"] + ":" + env["DB_PORT"];
+    std::string user = env["DB_USER"];
+    std::string pass = env["DB_PASSWORD"];
+    std::string db = env["DB_NAME"];
+        
+    sql::Driver* driver = get_driver_instance();
+    std::unique_ptr<sql::Connection> conn(driver->connect(host, user, pass));
+    conn->setSchema(db);
 
     std::cout << "Bienvenue dans le générateur de mot de passe" << std::endl;
     std::cout << "Tout d'abord, veuillez indiquer la longueur du mot de passe" << std::endl;
@@ -103,6 +158,7 @@ int main(){
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
+
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -133,24 +189,25 @@ int main(){
                 break;
             }
 
-            default : std::cout << "azer" << std::endl;
+            default : std::cout << "Bug" << std::endl;
         }
     }
+try
+{
+    std::unique_ptr<sql::PreparedStatement> prep_stmt(
+    conn->prepareStatement("INSERT INTO mdp(nom, pass) VALUES (?, ?)")
+);
+    prep_stmt->setString(1, mdp_name);
+    prep_stmt->setString(2, mdp);
+    prep_stmt->execute();
 
-    if(fichier.is_open()){
-        fichier << mdp_name << " ; " << mdp << std::endl;
-        fichier << std::endl;
-        fichier.close();
-        std::cout << "Voici votre mot de passe : " << mdp << "et son nom " << mdp_name << ", écrit dans " << filename << std::endl;
-    } else {
-        std::cout << "Erreur lors de l'écriture du fichier" << std::endl;
-    }
+}
+catch(const std::exception& e)
+{
+    std::cerr << e.what() << '\n';
+}
 
-
-
-
-
-    system("pause");
+    return 0;
 }
 
 
